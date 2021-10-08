@@ -59,7 +59,9 @@ lines(yhat ~ AGE, data = to_be_predicted2)
 
 #  When examining the "T value" we can determine the results to based on "P Value" becuase P comes from T.
 #  
-model_temp1 <- lm(INCWAGE ~ AGE + female + AfAm + Asian + Amindian + race_oth + Hispanic + educ_hs + educ_somecoll + educ_college + educ_advdeg)
+model_temp1 <- lm(log1p(INCWAGE) ~ AGE + female + AfAm + Asian + Amindian + race_oth + Hispanic + educ_hs + educ_somecoll + educ_college + educ_advdeg)
+summary(model_temp1)
+# For the independent variables (AfAm, Asain, Amindian, Hispanic) we fail to reject the Null Hyopothesis.
 suppressMessages(require(AER))
 # subset in order to plot...
 NNobs <- length(INCWAGE)
@@ -67,20 +69,9 @@ set.seed(12345) # just so you can replicate and get same "random" choices
 graph_obs <- (runif(NNobs) < 0.1) # so something like just 1/10 as many obs
 dat_graph <- subset(dat_use,graph_obs)  
 
-plot(dat_graph)
+plot(INCWAGE ~ jitter(AGE, factor = 2), pch = 16, col = rgb(0.5, 0.5, 0.5, alpha = 0.2), ylim = c(0,20), data = dat_graph)
 
-plot(INCWAGE ~ jitter(AGE, factor = 2), pch = 16, col = rgb(0.5, 0.5, 0.5, alpha = 0.2), data = dat_graph)
-
-# ^^ that looks like crap since Wages are soooooooo skew!  So try to find some sensible ylim = c(0, ??)
-
-
-plot(INCWAGE ~ jitter(AGE, factor = 2), pch = 16, col = rgb(0.5, 0.5, 0.5, alpha = 0.2), ylim = c(0,150000), data = dat_graph)
-# discus what you see in this plot
-plot(INCWAGE ~ jitter(AGE, factor = 2), pch = 16, col = rgb(0.5, 0.5, 0.5, alpha = 0.2), ylim = c(0,300000), data = dat_graph)
-
-# change this line to fit your regression
-
-to_be_predicted2 <- data.frame(AGE = 25:55, female = 1, AfAm = 0, Asian = 0, Amindian = 1, race_oth = 1, Hispanic = 1, educ_hs = 0, educ_somecoll = 0, educ_college = 1, educ_advdeg = 0)
+to_be_predicted2 <- data.frame(AGE = 25:55, female = 0, AfAm = 0, Asian = 0, Amindian = 1, race_oth = 1, Hispanic = 1, educ_hs = 1, educ_somecoll = 0, educ_college = 0, educ_advdeg = 0)
 
 to_be_predicted2$yhat <- predict(model_temp1, newdata = to_be_predicted2)
 
@@ -94,6 +85,17 @@ to_be_predicted2$yhat <- predict(model_temp1, newdata = to_be_predicted2)
 
 
 lines(yhat ~ AGE, data = to_be_predicted2)
+# When running the log of the regression we find that two additional varibales are now not signaficant (AfAm & Hispanic) Also the Log
+# has compressed the range between data points.  In the log of the regression we find the data is more concentrated distribution. 
+
+detach()
+detach()
+detach()
+detach()
+
+
+
+
 
 
 
