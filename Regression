@@ -1,3 +1,5 @@
+Study Group Nicholas Esposito, Nicholas Alonso, Kouakou Allah, Cisse Serigne
+
 attach(acs2017_ny)
 use_varb <- (AGE >= 25) & (AGE <= 55) & (LABFORCE == 2) & (WKSWORK2 > 4) & (UHRSWORK >= 35)
 dat_use <- subset(acs2017_ny,use_varb) # 
